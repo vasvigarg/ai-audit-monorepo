@@ -114,32 +114,35 @@ export async function POST(req: NextRequest) {
 
     // 7. Return the results
     return NextResponse.json(successResponse, { status: 200 });
-  } catch (error: any) {
-    // 8. Include robust error handling
+  } catch (error: unknown) {
+    // Changed 'any' to 'unknown'
+    // Log the error for server-side debugging
     console.error("Error in /api/audit:", error);
 
     let errorMessage = "An unexpected error occurred.";
     let statusCode = 500;
 
-    // Handle JSON parsing errors specifically
+    // Perform type checks before accessing properties
     if (error instanceof SyntaxError && error.message.includes("JSON")) {
       errorMessage = "Bad Request: Invalid JSON format in request body.";
       statusCode = 400;
-    }
-    // Handle potential OpenAI API errors (check structure based on SDK v4)
-    else if (error instanceof OpenAI.APIError) {
-      errorMessage = `OpenAI API Error: ${error.status} ${error.name} ${error.message}`;
+    } else if (error instanceof OpenAI.APIError) {
+      // Handle errors specifically from the OpenAI API
+      errorMessage =
+        `OpenAI API Error: ${error.status || "Unknown Status"} ${error.name || ""} ${error.message || ""}`.trim();
       statusCode = error.status || 500;
-    }
-    // Handle generic errors
-    else if (error instanceof Error) {
+    } else if (error instanceof Error) {
+      // Handle generic JavaScript errors AFTER specific checks
       errorMessage = `Internal Server Error: ${error.message}`;
     }
+    // You could add more specific 'else if' blocks for other error types if needed
 
+    // Format the error response using the shared AuditResponse type
     const errorResponse: AuditResponse = {
       success: false,
       error: errorMessage,
     };
+    // Return the error response
     return NextResponse.json(errorResponse, { status: statusCode });
   }
 }
