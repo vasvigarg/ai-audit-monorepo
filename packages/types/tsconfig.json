@@ -1,0 +1,6 @@
+// packages/types/tsconfig.json
+{
+  "extends": "@ai-audit/tsconfig/base.json", // Adjust path if different
+  "include": ["index.ts"],
+  "exclude": ["node_modules"]
+}
