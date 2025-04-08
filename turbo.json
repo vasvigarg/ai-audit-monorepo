@@ -16,6 +16,10 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "@ai-audit/api#build": {
+      "dependsOn": ["build"],
+      "env": ["OPENAI_API_KEY"]
     }
   }
 }

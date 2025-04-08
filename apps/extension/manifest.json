@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "AI Smart Contract Auditor",
+  "version": "1.0.0",
+  "description": "Adds an AI-powered security audit button to Solidity files on GitHub.",
+  "icons": {},
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["https://*.vercel.app/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*", "*://*.github.com/*/*"],
+      "js": ["dist/contentScript.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "AI Auditor Settings"
+  },
+  "background": {}
+}
