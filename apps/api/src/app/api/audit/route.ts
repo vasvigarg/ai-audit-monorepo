@@ -10,15 +10,19 @@ import type {
 // Import the OpenAI SDK (using v4+ syntax)
 import OpenAI from "openai";
 
-// 1. Instantiate the OpenAI client
-// Ensure your OPENAI_API_KEY is set in your environment variables (e.g., apps/api/.env.local)
+// Check if the OpenAI API key is configured at initialization time
+if (!process.env.OPENAI_API_KEY) {
+  console.warn("OpenAI API key not found in environment variables");
+}
+
+// 1. Instantiate the OpenAI client with error handling
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || "", // Provide empty string as fallback to avoid null/undefined errors
 });
 
 // 2. Define the POST handler function for the /api/audit route
 export async function POST(req: NextRequest) {
-  // Check if the OpenAI API key is configured
+  // Check if the OpenAI API key is configured during runtime
   if (!process.env.OPENAI_API_KEY) {
     console.error("OpenAI API key not configured");
     const errorResponse: AuditResponse = {
