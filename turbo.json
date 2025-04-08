@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "tasks": {
+  "pipeline": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
@@ -16,10 +16,7 @@
     "dev": {
       "cache": false,
       "persistent": true
-    },
-    "@ai-audit/api#build": {
-      "dependsOn": ["build"],
-      "env": ["OPENAI_API_KEY"]
     }
-  }
+  },
+  "globalEnv": ["OPENAI_API_KEY"]
 }
